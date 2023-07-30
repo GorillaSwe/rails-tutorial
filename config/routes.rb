@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :microposts
-  resources :users
-  root "users#hello"
+  get 'static_pages/home'
+  get 'static_pages/help'
+  root "application#hello"
 end
