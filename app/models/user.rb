@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+  has_many :microposts, dependent: :destroy
   attr_accessor :remember_token, :activation_token, :reset_token
   before_save :downcase_email
   before_create :create_activation_digest
@@ -54,27 +55,27 @@ class User < ApplicationRecord
     update_columns(reset_digest: User.digest(reset_token), reset_sent_at: Time.zone.now)
   end
 
-   # パスワード再設定の属性を設定する
-   def create_reset_digest
-    self.reset_token = User.new_token
-    update_columns(reset_digest:  （コードを書き込む）, reset_sent_at: （コードを書き込む）)
-  end
-
-  # パスワード再設定用メールを送信する
+  # パスワード再設定のメールを送信する
   def send_password_reset_email
     UserMailer.password_reset(self).deliver_now
   end
+  
+  # パスワード再設定の期限が切れている場合はtrueを返す
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
+  end
 
-  private
+  def feed
+    Micropost.where("user_id = ?", id)
+  end
 
-    # メールアドレスをすべて小文字にする
+  private 
     def downcase_email
-      self.email = email.downcase
+      self.email.downcase!
     end
 
-    # 有効化トークンとダイジェストを作成および代入する
     def create_activation_digest
-      self.activation_token  = User.new_token
+      self.activation_token = User.new_token
       self.activation_digest = User.digest(activation_token)
     end
 end

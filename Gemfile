@@ -5,6 +5,8 @@ ruby "3.0.6"
 gem "rails",           "7.0.4"
 gem "bcrypt",         "3.1.12"
 gem 'faker',          '1.8.6'
+gem 'carrierwave',             '1.2.2'
+gem 'mini_magick',             '4.7.0'
 gem 'bootstrap-sass', '3.3.7'
 gem "sassc-rails",     "2.1.2"
 gem "sprockets-rails", "3.4.2"
@@ -37,6 +39,7 @@ end
 
 group :production do
   gem "pg", "1.3.5"
+  gem 'fog', '1.42'
 end
 
 # Windows ではタイムゾーン情報用の tzinfo-data gem を含める必要があります
